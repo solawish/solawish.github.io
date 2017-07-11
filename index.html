@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+</head>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+function draw_svg(source_data){
+
+	var data = source_data['data'];
+	//15 minute line data(red color)
+	var min_15_red_line = [{x:data[0]['x'],y:15},{x:data[data.length - 1]['x'],y:15}];
+	
+	//force logout line(9:00 AM)
+	var force_logout_line = [{x:data[269]['x'],y:0},{x:data[269]['x'],y:60}];
+	
+    var width = 1000, height = 50;
+
+	//add new div obj
+	var d = d3.select('body').append('div');
+	
+	//add svg element
+    var s = d.append('svg');
+    s.attr({
+      'width': width + 100,
+      'height': height + 60
+    }).style({
+      'border': '1px dotted #aaa'
+    });
+	
+	
+	//add info
+	d.select('svg').append('text')
+		.attr('id','info')
+		.attr('x','20')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.text(source_data['info']);
+	
+
+	//time format
+	var format = d3.time.format("%d.%m.%Y %H:%M:%S");
+	
+    //var scaleX = d3.scale.linear()
+      //.range([0, width])
+      //.domain([0, 100]);
+	
+	var scaleX = d3.time.scale()
+	  .range([0,width])
+	  .domain([format.parse(data[0]['x']),format.parse(data[data.length - 1]['x'])]);
+	
+    var scaleY = d3.scale.linear()
+      .range([height, 0])
+      .domain([0, 60]); 
+
+    var line = d3.svg.line()
+      .x(function(d) {
+        return scaleX(format.parse(d.x));
+      }).y(function(d) {
+        return scaleY(d.y);
+      });
+
+    var axisX = d3.svg.axis()
+      .scale(scaleX)
+      .ticks(20)
+	  .tickFormat(d3.time.format("%H:%M:%S"))
+	  .orient("bottom");
+
+    var axisY = d3.svg.axis()
+      .scale(scaleY)
+      .ticks(6)
+	  .orient("left");
+
+	//draw min line
+    s.append('path')
+      .attr({
+        'd': line(data),
+        'stroke': '#09c',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	//draw red 15minute line
+	s.append('path')
+      .attr({
+        'd': line(min_15_red_line),
+        'stroke': '#f00',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	//draw bluge froce logout line
+	s.append('path')
+      .attr({
+        'd': line(force_logout_line),
+        'stroke': '#0F0',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	  
+
+    s.append('g')
+     .call(axisX)  //call axisX
+	 .attr({
+      'fill':'none',
+      'stroke':'#000',
+      'transform':'translate(35,'+(height+40)+')' 
+     });
+	 
+    s.append('g')
+     .call(axisY)  //call axisY
+	 .attr({
+      'fill':'none',
+      'stroke':'#000',
+      'transform':'translate(35,40)'
+     });
+	 
+}
+
+function main(){
+
+	var date = "2017-07-10";
+	
+	var coordinate = ["1-150-6","1-150-15","2-450-12","3-50-12","4-200-6","4-200-15","5-350-12","6-100-12"];
+	var coordinate_moon = [0,1,1,0,0,0,0,0];
+	
+	for (var coor in coordinate){
+		d3.json("./data/" + date + "/" + "abougiful" + "_" + date +"_"+ coordinate[coor] +"_planet.json", function(data) {
+			draw_svg(data);
+		});		
+		
+		d3.json("./data/" + date + "/" + "abougiful" + "_" + date +"_"+ coordinate[coor] +"_moon.json", function(data) {
+			draw_svg(data);
+		});
+	}
+	
+	console.log(location.search);
+}
+
+window.onload = main();
+</script>
+
+
+</body></html>
