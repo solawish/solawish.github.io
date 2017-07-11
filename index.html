@@ -17,6 +17,9 @@ body {
 </head>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
+<label for="checkbox_hide_moon"><input id = "checkbox_hide_moon" type = "checkbox" onclick = "Hide_Moon_div()">Hide_Moon</input></label>
+<label for="checkbox_hide_planet"><input id = "checkbox_hide_planet" type = "checkbox" onclick = "Hide_Planet_div()">Hide_planet</input></label>
+
 <script>
 function draw_svg(source_data){
 
@@ -30,7 +33,7 @@ function draw_svg(source_data){
     var width = 1000, height = 50;
 
 	//add new div obj
-	var d = d3.select('body').append('div');
+	var d = d3.select('body').append('div').attr('id',source_data['info'].split(" ")[2]);
 	
 	//add svg element
     var s = d.append('svg');
@@ -149,6 +152,23 @@ function main(){
 	}
 	
 	console.log(location.search);
+}
+
+function Hide_Moon_div(){
+	var check = document.getElementById('checkbox_hide_moon');
+	console.log(check.checked);
+	if (check.checked)
+		d3.select('body').selectAll('#moon').attr('style','display:none');
+	else
+		d3.select('body').selectAll('#moon').attr('style','');
+}
+
+function Hide_Planet_div(){
+	var check = document.getElementById('checkbox_hide_planet');
+	if (check.checked)
+		d3.select('body').selectAll('#planet').attr('style','display:none');
+	else
+		d3.select('body').selectAll('#planet').attr('style','');
 }
 
 window.onload = main();
