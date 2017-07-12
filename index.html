@@ -181,7 +181,9 @@ function draw_svg(source_data){
 
 function main(){
 
-	var date = "2017-07-10";
+	//var date = "2017-07-10";
+	
+	var date = window.location.search.toString().split("?")[1].split("=")[1];
 	
 	var coordinate = ["1-150-6","1-150-15","2-450-12","3-50-12","4-200-6","4-200-15","5-350-12","6-100-12"];
 	var coordinate_moon = [0,1,1,0,0,0,0,0];
@@ -195,8 +197,6 @@ function main(){
 			draw_svg(data);
 		});
 	}
-	
-	console.log(location.search);
 }
 
 function Hide_Moon_div(){
