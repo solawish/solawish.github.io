@@ -24,7 +24,7 @@ body {
 
 <form action="Record.html" method="get">
 <select id = "id_select" name="id" onchange = "add_date_with_userID()">
-	<option value="">-- 請選擇 --</option>
+	<option value="default">-- 請選擇 --</option>
 	<option value="abougiful">abougiful</option>
 </select>
 <select id = "date_select" name="date">
@@ -38,15 +38,26 @@ body {
 	function add_date_with_userID()
 	{
 		d3.json("./data/TableOfContent.json", function(data) {
+			
+			//get selected id 
 			var sel = document.getElementById('id_select');
 			selected_id = sel.options[sel.selectedIndex].value;
-			//console.log(selected_id);
 			
-			var selectd_date = d3.select("#date_select");
-			for (var i in data[selected_id])
+			//change date_select item by selected id
+			if (selected_id.indexOf("default") == -1 )
 			{
-				selectd_date.append('option').attr('value',data[selected_id][i]).text(data[selected_id][i]);
-				//console.log(data[selected_id][i]);
+				var selectd_date = d3.select("#date_select");
+				selectd_date.selectAll('option').remove();
+				
+				for (var i in data[selected_id]['date'])
+				{
+					selectd_date.append('option').attr('value',data[selected_id]['date'][i]).text(data[selected_id]['date'][i]);
+				}	
+			}
+			else
+			{
+				var selectd_date = d3.select("#date_select");
+				selectd_date.selectAll('option').remove();
 			}			
 		});	
 	}
