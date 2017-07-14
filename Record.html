@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ogame Data Viewer</title>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+</head>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src = "js/index.js"></script>
+<label for="checkbox_hide_moon"><input id = "checkbox_hide_moon" type = "checkbox" onclick = "Hide_Moon_div()">Hide_Moon</input></label>
+<label for="checkbox_hide_planet"><input id = "checkbox_hide_planet" type = "checkbox" onclick = "Hide_Planet_div()">Hide_planet</input></label>
+
+<script>
+function draw_svg(source_data){
+
+	var data = source_data['data'];
+	//15 minute line data(red color)
+	var min_15_red_line = [{x:data[0]['x'],y:15},{x:data[data.length - 1]['x'],y:15}];
+	
+	//force logout line(9:00 AM)
+	var force_logout_line = [{x:data[269]['x'],y:0},{x:data[269]['x'],y:60}];
+	
+    var width = 1000, height = 50;
+
+	//add new div obj
+	var d = d3.select('body').append('div').attr('id',source_data['info'].split(" ")[2]);
+	
+	//add svg element
+    var s = d.append('svg');
+    s.attr({
+      'width': width + 100,
+      'height': height + 60
+    }).style({
+      'border': '1px dotted #aaa'
+    });
+	
+	
+	//add info_date
+	d.select('svg').append('text')
+		.attr('id','info_date')
+		.attr('x','50')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.text(source_data['info'].split(" ")[0]);
+		
+	//add info_ID
+	d.select('svg').append('text')
+		.attr('id','info_ID')
+		.attr('x','150')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.attr('fill' , "blue")
+		.text(source_data['info'].split(" ")[1]);
+		
+	//add info_type
+	
+	if (source_data['info'].split(" ")[2].indexOf("moon") == -1 )
+	{
+		d.select('svg').append('text')
+		.attr('id','info_type')
+		.attr('x','250')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.attr('fill' , "green")
+		.text(source_data['info'].split(" ")[2]);
+	}
+	else
+	{
+		d.select('svg').append('text')
+		.attr('id','info_type')
+		.attr('x','250')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.attr('fill' , "gray")
+		.text(source_data['info'].split(" ")[2]);
+	
+	
+	}
+	
+	
+		
+	//add info_coordinate
+	d.select('svg').append('text')
+		.attr('id','info_coordinate')
+		.attr('x','350')
+		.attr('y','20')
+		.attr('font-size','15px')
+		.attr('fill' , "red")
+		.text("[" + source_data['info'].split(" ")[3] + "]");
+	
+
+	//time format
+	var format = d3.time.format("%d.%m.%Y %H:%M:%S");
+	
+    //var scaleX = d3.scale.linear()
+      //.range([0, width])
+      //.domain([0, 100]);
+	
+	var scaleX = d3.time.scale()
+	  .range([0,width])
+	  .domain([format.parse(data[0]['x']),format.parse(data[data.length - 1]['x'])]);
+	
+    var scaleY = d3.scale.linear()
+      .range([height, 0])
+      .domain([0, 60]); 
+
+    var line = d3.svg.line()
+      .x(function(d) {
+        return scaleX(format.parse(d.x));
+      }).y(function(d) {
+        return scaleY(d.y);
+      });
+
+    var axisX = d3.svg.axis()
+      .scale(scaleX)
+      .ticks(20)
+	  .tickFormat(d3.time.format("%H:%M:%S"))
+	  .orient("bottom");
+
+    var axisY = d3.svg.axis()
+      .scale(scaleY)
+      .ticks(6)
+	  .orient("left");
+
+	//draw min line
+    s.append('path')
+      .attr({
+        'd': line(data),
+        'stroke': '#09c',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	//draw red 15minute line
+	s.append('path')
+      .attr({
+        'd': line(min_15_red_line),
+        'stroke': '#f00',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	//draw bluge froce logout line
+	s.append('path')
+      .attr({
+        'd': line(force_logout_line),
+        'stroke': '#0F0',
+        'fill': 'none',
+		'transform':'translate(35,40)'
+      });
+	  
+	  
+
+    s.append('g')
+     .call(axisX)  //call axisX
+	 .attr({
+      'fill':'none',
+      'stroke':'#000',
+      'transform':'translate(35,'+(height+40)+')' 
+     });
+	 
+    s.append('g')
+     .call(axisY)  //call axisY
+	 .attr({
+      'fill':'none',
+      'stroke':'#000',
+      'transform':'translate(35,40)'
+     });
+	 
+}
+
+function main(){
+
+	var url_argu = window.location.search.toString().split("?")[1].split("&");
+	var argu = {};
+	
+	for (var item in url_argu)
+	{
+		var temp = url_argu[item].split("=");
+		argu[temp[0]] = temp[1];
+	}
+	
+	var coordinate = ["1-150-6","1-150-15","2-450-12","3-50-12","4-200-6","4-200-15","5-350-12","6-100-12"];
+	var coordinate_moon = [0,1,1,0,0,0,0,0];
+	
+	//var id = "abougiful";
+	for (var coor in coordinate){
+		d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_planet.json", function(data) {
+			draw_svg(data);
+		});		
+		
+		d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_moon.json", function(data) {
+			draw_svg(data);
+		});
+	}
+}
+
+function Hide_Moon_div(){
+	var check = document.getElementById('checkbox_hide_moon');
+	console.log(check.checked);
+	if (check.checked)
+		d3.select('body').selectAll('#moon').attr('style','display:none');
+	else
+		d3.select('body').selectAll('#moon').attr('style','');
+}
+
+function Hide_Planet_div(){
+	var check = document.getElementById('checkbox_hide_planet');
+	if (check.checked)
+		d3.select('body').selectAll('#planet').attr('style','display:none');
+	else
+		d3.select('body').selectAll('#planet').attr('style','');
+}
+
+window.onload = main();
+</script>
+
+</body></html>
