@@ -31,7 +31,15 @@ function draw_svg(source_data){
 	var min_15_red_line = [{x:data[0]['x'],y:15},{x:data[data.length - 1]['x'],y:15}];
 	
 	//force logout line(9:00 AM)
-	var force_logout_line = [{x:data[269]['x'],y:0},{x:data[269]['x'],y:60}];
+	var force_logout_line ;
+	for(var item in data)
+	{
+		if ( data[item]['x'].split(' ')[1].split(':')[0].indexOf('09') > -1)
+		{
+			force_logout_line = [{x:data[item]['x'],y:0},{x:data[item]['x'],y:60}];
+			break;
+		}		
+	}
 	
     var width = 1000, height = 50;
 
