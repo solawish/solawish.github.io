@@ -19,7 +19,7 @@ body {
 </head>
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
-<script src = "js/index.js"></script>
+<!--script src = "js/index.js"></script-->
 <label for="checkbox_hide_moon"><input id = "checkbox_hide_moon" type = "checkbox" onclick = "Hide_Moon_div()">Hide_Moon</input></label>
 <label for="checkbox_hide_planet"><input id = "checkbox_hide_planet" type = "checkbox" onclick = "Hide_Planet_div()">Hide_planet</input></label>
 
@@ -222,7 +222,7 @@ function main(){
 
 function Hide_Moon_div(){
 	var check = document.getElementById('checkbox_hide_moon');
-	console.log(check.checked);
+	//console.log(check.checked);
 	if (check.checked)
 		d3.select('body').selectAll('#moon').attr('style','display:none');
 	else
