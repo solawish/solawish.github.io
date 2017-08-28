@@ -201,19 +201,23 @@ function main(){
 		argu[temp[0]] = temp[1];
 	}
 	
-	var coordinate = ["1-150-6","1-150-15","2-450-12","3-50-12","4-200-6","4-200-15","5-350-12","6-100-12"];
-	var coordinate_moon = [0,1,1,0,0,0,0,0];
+	d3.json("./data/TableOfContent.json", function(data) {
 	
-	//var id = "abougiful";
-	for (var coor in coordinate){
-		d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_planet.json", function(data) {
-			draw_svg(data);
-		});		
+		//var coordinate = ["1-150-6","1-150-15","2-450-12","3-50-12","4-200-6","4-200-15","5-350-12","6-100-12"];
+		var coordinate = data[argu['id']]['coordinate'];
+		var coordinate_moon = [0,1,1,0,0,0,0,0];
+	
+		//var id = "abougiful";
+		for (var coor in coordinate){
+			d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_planet.json", function(data) {
+				draw_svg(data);
+			});		
 		
-		d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_moon.json", function(data) {
-			draw_svg(data);
-		});
-	}
+			d3.json("./data/" + argu['date'] + "/" + argu['id'] + "_" + argu['date'] +"_"+ coordinate[coor] +"_moon.json", function(data) {
+				draw_svg(data);
+			});
+		}
+	});
 }
 
 function Hide_Moon_div(){
