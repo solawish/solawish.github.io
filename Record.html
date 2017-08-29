@@ -20,9 +20,9 @@ body {
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <!--script src = "js/index.js"></script-->
-<input type="button" value="前一天" id = "last_day_btn" onclick = "go_last_day()">
+<a href = '' id = "last_day_a"><input type="button" value="前一天" id = "last_day_btn" ></a>
 <a href='index.html'><input type="button" value="回主選單" id = "back_main_btn" ></a>
-<input type="button" value="後一天" id = "next_day_btn" onclick = "go_next_day()">
+<a href = '' id = "next_day_a"><input type="button" value="後一天" id = "next_day_btn" ></a>
 
 <label for="checkbox_hide_moon"><input id = "checkbox_hide_moon" type = "checkbox" onclick = "Hide_Moon_div()">Hide_Moon</input></label>
 <label for="checkbox_hide_planet"><input id = "checkbox_hide_planet" type = "checkbox" onclick = "Hide_Planet_div()">Hide_planet</input></label>
@@ -222,6 +222,8 @@ function main(){
 			});
 		}
 	});
+	
+	set_nextDay_lastDay_btn();
 }
 
 function Hide_Moon_div(){
@@ -241,13 +243,49 @@ function Hide_Planet_div(){
 		d3.select('body').selectAll('#planet').attr('style','');
 }
 
-function go_last_day(){
+function set_nextDay_lastDay_btn(){
+	
+	var url_argu = window.location.search.toString().split("?")[1].split("&");
+	var argu = {};
+	
+	for (var item in url_argu)
+	{
+		var temp = url_argu[item].split("=");
+		argu[temp[0]] = temp[1];
+	}
 	
 	d3.json("./data/TableOfContent.json", function(data) {
 		
-		var today = new Date(argu['date']);
-		console.log(today);
-	
+		var date_array_count;
+		for (var item in data[argu['id']]['date'])
+		{
+			if (data[argu['id']]['date'][item].indexOf(argu['date']) > -1)
+			{
+				date_array_count = item;
+				break;
+			}		
+		}
+		
+		if (parseInt(date_array_count) + 1 == data[argu['id']]['date'].length) // the last date in exist array
+		{
+			document.getElementById('next_day_btn').disabled = true;
+		}
+		else
+		{
+			var a_node = document.getElementById('next_day_a');
+			a_node.href = "Record.html?" + "id=" + argu['id'] + "&" + "date=" + data[argu['id']]['date'][parseInt(date_array_count) + 1]; 
+		}		
+		
+		if (parseInt(date_array_count) == 0) // the first date in exist array
+		{
+			document.getElementById('last_day_btn').disabled = true;
+		}
+		else
+		{
+			var a_node = document.getElementById('last_day_a');
+			a_node.href = "Record.html?" + "id=" + argu['id'] + "&" + "date=" + data[argu['id']]['date'][parseInt(date_array_count) - 1]; 
+		}	
+		
 	});
 
 }
