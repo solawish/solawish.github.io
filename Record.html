@@ -20,6 +20,10 @@ body {
 <body>
 <script src="//d3js.org/d3.v3.min.js"></script>
 <!--script src = "js/index.js"></script-->
+<input type="button" value="前一天" id = "last_day_btn" onclick = "go_last_day()">
+<a href='index.html'><input type="button" value="回主選單" id = "back_main_btn" ></a>
+<input type="button" value="後一天" id = "next_day_btn" onclick = "go_next_day()">
+
 <label for="checkbox_hide_moon"><input id = "checkbox_hide_moon" type = "checkbox" onclick = "Hide_Moon_div()">Hide_Moon</input></label>
 <label for="checkbox_hide_planet"><input id = "checkbox_hide_planet" type = "checkbox" onclick = "Hide_Planet_div()">Hide_planet</input></label>
 
@@ -235,6 +239,17 @@ function Hide_Planet_div(){
 		d3.select('body').selectAll('#planet').attr('style','display:none');
 	else
 		d3.select('body').selectAll('#planet').attr('style','');
+}
+
+function go_last_day(){
+	
+	d3.json("./data/TableOfContent.json", function(data) {
+		
+		var today = new Date(argu['date']);
+		console.log(today);
+	
+	});
+
 }
 
 window.onload = main();
