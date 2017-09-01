@@ -59,22 +59,25 @@ function draw_svg(source_data){
 		}
 		else
 		{			
-			if (min_zero_count <= 8) // if count <= 8 : high probality not real online 
+			if (min_zero_count != 0)
 			{
-				/*temp_obj.x = data[item - 1].x;
-				temp_obj['y'] = data[item - 1]['y'];
-				temp_list.push(temp_obj);
-				temp_obj = {};
-				temp_obj['x'] = data[item - 8]['x'];
-				temp_obj['y'] = data[item - 8]['y'];
-				temp_list.push(temp_obj);
+				if (min_zero_count <= 8) // if count <= 8 : high probality not real online 
+				{
+					/*temp_obj.x = data[item - 1].x;
+					temp_obj['y'] = data[item - 1]['y'];
+					temp_list.push(temp_obj);
+					temp_obj = {};
+					temp_obj['x'] = data[item - 8]['x'];
+					temp_obj['y'] = data[item - 8]['y'];
+					temp_list.push(temp_obj);
 				
-				console.log(temp_list);
-				temp_obj = {};
-				temp_list = [];*/
-				console.log(source_data['info'].split(' ')[2] + ' ' + source_data['info'].split(' ')[3] + ' ' + data[item].x);
-			}
-			min_zero_count = 0;			
+					console.log(temp_list);
+					temp_obj = {};
+					temp_list = [];*/
+					console.log(source_data['info'].split(' ')[2] + ' ' + source_data['info'].split(' ')[3] + ' ' + data[item].x);
+				}
+				min_zero_count = 0;		
+			}				
 		}
 	}
 	
