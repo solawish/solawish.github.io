@@ -45,6 +45,12 @@ function draw_svg(source_data){
 		}		
 	}
 	
+	//check just online 1 sec or use ship to flash light (by this program, is 16 min)
+	var online_15_min_check = [];
+	var temp = []
+	
+	
+	
     var width = 1000, height = 50;
 
 	//add new div obj
@@ -165,7 +171,7 @@ function draw_svg(source_data){
 		'transform':'translate(35,40)'
       });
 	  
-	//draw bluge froce logout line
+	//draw green froce logout line
 	s.append('path')
       .attr({
         'd': line(force_logout_line),
@@ -173,7 +179,6 @@ function draw_svg(source_data){
         'fill': 'none',
 		'transform':'translate(35,40)'
       });
-	  
 	  
 
     s.append('g')
