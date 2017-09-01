@@ -61,7 +61,7 @@ function draw_svg(source_data){
 		{			
 			if (min_zero_count <= 8) // if count <= 8 : high probality not real online 
 			{
-				temp_obj.x = data[item - 1].x;
+				/*temp_obj.x = data[item - 1].x;
 				temp_obj['y'] = data[item - 1]['y'];
 				temp_list.push(temp_obj);
 				temp_obj = {};
@@ -71,7 +71,8 @@ function draw_svg(source_data){
 				
 				console.log(temp_list);
 				temp_obj = {};
-				temp_list = [];
+				temp_list = [];*/
+				console.log(data[item - 1].x);
 			}
 			min_zero_count = 0;			
 		}
