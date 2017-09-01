@@ -47,9 +47,28 @@ function draw_svg(source_data){
 	
 	//check just online 1 sec or use ship to flash light (by this program, is 16 min)
 	var online_15_min_check = [];
-	var temp = []
+	var temp_list = [];
+	var temp_obj = {};
+	var min_zero_count = 0;
 	
-	//for ()
+	for (var item in data)
+	{
+		if (data[item]['y'] == 0)//if min is 0
+		{
+			min_zero_count += 1;
+		}
+		else
+		{			
+			if (min_zero_count <= 8) // if count <= 8 : high probality not real online 
+			{
+				temp_obj['x'] = data[item]['x'];
+				temp_obj['y'] = data[item]['y'];
+				temp_list.push(temp_obj);
+				console.log(temp_list);
+			}
+			min_zero_count = 0;			
+		}
+	}
 	
     var width = 1000, height = 50;
 
