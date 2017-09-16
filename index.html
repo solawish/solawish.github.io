@@ -41,11 +41,11 @@ body {
 		d3.json("./data/TableOfContent.json", function(data) {
 		
 			//set id_select option
-			var id_sel = document.getElementById('id_select');
+			var id_sel = d3.select('#id_select');
 			for (var item in data['userID'])
 			{
-				id_sel.append('option');
-				//id_sel.append('option').attr('value',data['userID'][item]).text(data['userID'][item]);				
+				//id_sel.append('option');
+				id_sel.append('option').attr('value',data['userID'][item]).text(data['userID'][item]);				
 			}
 	
 		});
