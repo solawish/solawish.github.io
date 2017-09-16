@@ -25,7 +25,8 @@ body {
 <form action="Record.html" method="get">
 <select id = "id_select" name="id" onchange = "add_date_with_userID()">
 	<option value="default">-- 請選擇 --</option>
-	<option value="godpoo3">godpoo3</option>
+	<!--option value="godpoo3">godpoo3</option-->
+	<!--option value="CCTVBB">CCTVBB</option-->
 </select>
 <select id = "date_select" name="date">
 　<!--option value="2017-07-11">2017-07-11</option -->
@@ -35,10 +36,24 @@ body {
 
 
 <script>
+	function set_id_select_option()
+	{
+		d3.json("./data/TableOfContent.json", function(data) {
+		
+			//set id_select option
+			var id_sel = document.getElementById('id_select');
+			for (var item in data['userID'])
+			{
+				id_sel.append('option').attr('value',data['userID'][item]).text(data['userID'][item]);				
+			}
+	
+		});
+	}
+
 	function add_date_with_userID()
 	{
 		d3.json("./data/TableOfContent.json", function(data) {
-			
+						
 			//get selected id 
 			var sel = document.getElementById('id_select');
 			selected_id = sel.options[sel.selectedIndex].value;
@@ -61,6 +76,7 @@ body {
 			}			
 		});	
 	}
+	window.onload = set_id_select_option();
 </script>
 </form>
 
